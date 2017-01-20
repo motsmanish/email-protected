@@ -1,9 +1,9 @@
 <?php
 
-class Password_Protected_Admin {
+class Email_Protected_Admin {
 
 	var $settings_page_id;
-	var $options_group = 'password-protected';
+	var $options_group = 'email-protected';
 
 	/**
 	 * Constructor
@@ -12,13 +12,13 @@ class Password_Protected_Admin {
 
 		global $wp_version;
 
-		add_action( 'admin_init', array( $this, 'password_protected_settings' ), 5 );
+		add_action( 'admin_init', array( $this, 'email_protected_settings' ), 5 );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		//add_action( 'password_protected_help_tabs', array( $this, 'help_tabs' ), 5 );
-		//add_action( 'admin_notices', array( $this, 'password_protected_admin_notices' ) );
+		//add_action( 'email_protected_help_tabs', array( $this, 'help_tabs' ), 5 );
+		//add_action( 'admin_notices', array( $this, 'email_protected_admin_notices' ) );
 		//add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 4 );
-		add_filter( 'plugin_action_links_password-protected/password-protected.php', array( $this, 'plugin_action_links' ) );
-		add_filter( 'pre_update_option_password_protected_password', array( $this, 'pre_update_option_password_protected_password' ), 10, 2 );
+		add_filter( 'plugin_action_links_email-protected/email-protected.php', array( $this, 'plugin_action_links' ) );
+		add_filter( 'pre_update_option_email_protected_password', array( $this, 'pre_update_option_email_protected_password' ), 10, 2 );
 
 	}
 
@@ -27,7 +27,7 @@ class Password_Protected_Admin {
 	 */
 	public function admin_menu() {
 
-		$this->settings_page_id = add_options_page( __( 'Password Protected', 'password-protected' ), __( 'Password Protected', 'password-protected' ), 'manage_options', 'password-protected', array( $this, 'settings_page' ) );
+		$this->settings_page_id = add_options_page( __( 'Email Protected', 'email-protected' ), __( 'Email Protected', 'email-protected' ), 'manage_options', 'email-protected', array( $this, 'settings_page' ) );
 		add_action( 'load-' . $this->settings_page_id, array( $this, 'add_help_tabs' ), 20 );
 
 	}
@@ -40,11 +40,11 @@ class Password_Protected_Admin {
 
 		<div class="wrap">
 			<div id="icon-options-general" class="icon32"><br /></div>
-			<h2><?php _e( 'Email Protection Settings', 'password-protected' ) ?></h2>
+			<h2><?php _e( 'Email Protection Settings', 'email-protected' ) ?></h2>
 			<form method="post" action="options.php">
 				<?php
-				settings_fields( 'password-protected' );
-				do_settings_sections( 'password-protected' );
+				settings_fields( 'email-protected' );
+				do_settings_sections( 'email-protected' );
 				?>
 				<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save Changes' ) ?>"></p>
 			</form>
@@ -64,7 +64,7 @@ class Password_Protected_Admin {
 			return;
 		}
 
-		do_action( 'password_protected_help_tabs', get_current_screen() );
+		do_action( 'email_protected_help_tabs', get_current_screen() );
 
 	}
 
@@ -76,11 +76,11 @@ class Password_Protected_Admin {
 	public function help_tabs( $current_screen ) {
 
 		$current_screen->add_help_tab( array(
-			'id'      => 'PASSWORD_PROTECTED_SETTINGS',
-			'title'   => __( 'Password Protected', 'password-protected' ),
-			'content' => __( '<p><strong>Email Protection Status</strong><br />Turn on/off password protection.</p>', 'password-protected' )
-				. __( '<p><strong>Protected Permissions</strong><br />Allow access for logged in users and administrators without needing to enter a password. You will need to enable this option if you want administrators to be able to preview the site in the Theme Customizer. Also allow RSS Feeds to be accessed when the site is password protected.</p>', 'password-protected' )
-				. __( '<p><strong>Password Fields</strong><br />To set a new password, enter it into both fields. You cannot set an `empty` password. To disable password protection uncheck the Enabled checkbox.</p>', 'password-protected' )
+			'id'      => 'EMAIL_PROTECTED_SETTINGS',
+			'title'   => __( 'Email Protected', 'email-protected' ),
+			'content' => __( '<p><strong>Email Protection Status</strong><br />Turn on/off password protection.</p>', 'email-protected' )
+				. __( '<p><strong>Protected Permissions</strong><br />Allow access for logged in users and administrators without needing to enter a password. You will need to enable this option if you want administrators to be able to preview the site in the Theme Customizer. Also allow RSS Feeds to be accessed when the site is password protected.</p>', 'email-protected' )
+				. __( '<p><strong>Password Fields</strong><br />To set a new password, enter it into both fields. You cannot set an `empty` password. To disable password protection uncheck the Enabled checkbox.</p>', 'email-protected' )
 		) );
 
 	}
@@ -88,53 +88,53 @@ class Password_Protected_Admin {
 	/**
 	 * Settings API
 	 */
-	public function password_protected_settings() {
+	public function email_protected_settings() {
 
 		add_settings_section(
 			'password_protected',
 			'',
-			array( $this, 'password_protected_settings_section' ),
+			array( $this, 'email_protected_settings_section' ),
 			$this->options_group
 		);
 
 		add_settings_field(
-			'password_protected_status',
-			__( 'Email Protection Status', 'password-protected' ),
-			array( $this, 'password_protected_status_field' ),
+			'email_protected_status',
+			__( 'Email Protection Status', 'email-protected' ),
+			array( $this, 'email_protected_status_field' ),
 			$this->options_group,
 			'password_protected'
 		);
 
 		add_settings_field(
-			'password_protected_permissions',
-			__( 'Protected Permissions', 'password-protected' ),
-			array( $this, 'password_protected_permissions_field' ),
+			'email_protected_permissions',
+			__( 'Protected Permissions', 'email-protected' ),
+			array( $this, 'email_protected_permissions_field' ),
 			$this->options_group,
 			'password_protected'
 		);
 /*
 		add_settings_field(
-			'password_protected_password',
-			__( 'New Password', 'password-protected' ),
-			array( $this, 'password_protected_password_field' ),
+			'email_protected_password',
+			__( 'New Password', 'email-protected' ),
+			array( $this, 'email_protected_password_field' ),
 			$this->options_group,
 			'password_protected'
 		);
 
 		add_settings_field(
-			'password_protected_allowed_ip_addresses',
-			__( 'Allow IP Addresses', 'password-protected' ),
-			array( $this, 'password_protected_allowed_ip_addresses_field' ),
+			'email_protected_allowed_ip_addresses',
+			__( 'Allow IP Addresses', 'email-protected' ),
+			array( $this, 'email_protected_allowed_ip_addresses_field' ),
 			$this->options_group,
 			'password_protected'
 		);
 */
-		register_setting( $this->options_group, 'password_protected_status', 'intval' );
-		//register_setting( $this->options_group, 'password_protected_feeds', 'intval' );
-		register_setting( $this->options_group, 'password_protected_administrators', 'intval' );
-		//register_setting( $this->options_group, 'password_protected_users', 'intval' );
-		//register_setting( $this->options_group, 'password_protected_password', array( $this, 'sanitize_password_protected_password' ) );
-		//register_setting( $this->options_group, 'password_protected_allowed_ip_addresses', array( $this, 'sanitize_ip_addresses' ) );
+		register_setting( $this->options_group, 'email_protected_status', 'intval' );
+		//register_setting( $this->options_group, 'email_protected_feeds', 'intval' );
+		register_setting( $this->options_group, 'email_protected_administrators', 'intval' );
+		//register_setting( $this->options_group, 'email_protected_users', 'intval' );
+		//register_setting( $this->options_group, 'email_protected_password', array( $this, 'sanitize_email_protected_password' ) );
+		//register_setting( $this->options_group, 'email_protected_allowed_ip_addresses', array( $this, 'sanitize_ip_addresses' ) );
 
 	}
 
@@ -144,24 +144,24 @@ class Password_Protected_Admin {
 	 * @param   string  $val  Password.
 	 * @return  string        Sanitized password.
 	 */
-	public function sanitize_password_protected_password( $val ) {
+	public function sanitize_email_protected_password( $val ) {
 
-		$old_val = get_option( 'password_protected_password' );
+		$old_val = get_option( 'email_protected_password' );
 
 		if ( is_array( $val ) ) {
 			if ( empty( $val['new'] ) ) {
 				return $old_val;
 			} elseif ( empty( $val['confirm'] ) ) {
-				add_settings_error( 'password_protected_password', 'password_protected_password', __( 'New password not saved. When setting a new password please enter it in both fields.', 'password-protected' ) );
+				add_settings_error( 'email_protected_password', 'email_protected_password', __( 'New password not saved. When setting a new password please enter it in both fields.', 'email-protected' ) );
 				return $old_val;
 			} elseif ( $val['new'] != $val['confirm'] ) {
-				add_settings_error( 'password_protected_password', 'password_protected_password', __( 'New password not saved. Password fields did not match.', 'password-protected' ) );
+				add_settings_error( 'email_protected_password', 'email_protected_password', __( 'New password not saved. Password fields did not match.', 'email-protected' ) );
 				return $old_val;
 			} elseif ( $val['new'] == $val['confirm'] ) {
-				add_settings_error( 'password_protected_password', 'password_protected_password', __( 'New password saved.', 'password-protected' ), 'updated' );
+				add_settings_error( 'email_protected_password', 'email_protected_password', __( 'New password saved.', 'email-protected' ), 'updated' );
 				return $val['new'];
 			}
-			return get_option( 'password_protected_password' );
+			return get_option( 'email_protected_password' );
 		}
 
 		return $val;
@@ -201,56 +201,56 @@ class Password_Protected_Admin {
 	}
 
 	/**
-	 * Password Protected Section
+	 * Email Protected Section
 	 */
-	public function password_protected_settings_section() {
+	public function email_protected_settings_section() {
 
-		echo '<p>' . __( 'Password protect your web site. Users will be asked to enter the email used for subscription to view the site.', 'password-protected' )  . '</p>';
+		echo '<p>' . __( 'Password protect your web site. Users will be asked to enter the email used for subscription to view the site.', 'email-protected' )  . '</p>';
 			
 	}
 
 	/**
 	 * Password Protection Status Field
 	 */
-	public function password_protected_status_field() {
+	public function email_protected_status_field() {
 
-		echo '<label><input name="password_protected_status" id="password_protected_status" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_status' ), false ) . ' /> ' . __( 'Enabled', 'password-protected' ) . '</label>';
+		echo '<label><input name="email_protected_status" id="email_protected_status" type="checkbox" value="1" ' . checked( 1, get_option( 'email_protected_status' ), false ) . ' /> ' . __( 'Enabled', 'email-protected' ) . '</label>';
 
 	}
 
 	/**
 	 * Password Protection Permissions Field
 	 */
-	public function password_protected_permissions_field() {
+	public function email_protected_permissions_field() {
 
-		echo '<label><input name="password_protected_administrators" id="password_protected_administrators" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_administrators' ), false ) . ' /> ' . __( 'Allow Administrators', 'password-protected' ) . '</label>';
-		//echo '<label><input name="password_protected_users" id="password_protected_users" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_users' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow Logged In Users', 'password-protected' ) . '</label>';
-		//echo '<label><input name="password_protected_feeds" id="password_protected_feeds" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_feeds' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow RSS Feeds', 'password-protected' ) . '</label>';
+		echo '<label><input name="email_protected_administrators" id="email_protected_administrators" type="checkbox" value="1" ' . checked( 1, get_option( 'email_protected_administrators' ), false ) . ' /> ' . __( 'Allow Administrators', 'email-protected' ) . '</label>';
+		//echo '<label><input name="email_protected_users" id="email_protected_users" type="checkbox" value="1" ' . checked( 1, get_option( 'email_protected_users' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow Logged In Users', 'email-protected' ) . '</label>';
+		//echo '<label><input name="email_protected_feeds" id="email_protected_feeds" type="checkbox" value="1" ' . checked( 1, get_option( 'email_protected_feeds' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow RSS Feeds', 'email-protected' ) . '</label>';
 
 	}
 
 	/**
 	 * Password Field
 	 */
-	public function password_protected_password_field() {
+	public function email_protected_password_field() {
 
-		echo '<input type="password" name="password_protected_password[new]" id="password_protected_password_new" size="16" value="" autocomplete="off"> <span class="description">' . __( 'If you would like to change the password type a new one. Otherwise leave this blank.', 'password-protected' ) . '</span><br>
-			<input type="password" name="password_protected_password[confirm]" id="password_protected_password_confirm" size="16" value="" autocomplete="off"> <span class="description">' . __( 'Type your new password again.', 'password-protected' ) . '</span>';
+		echo '<input type="password" name="email_protected_password[new]" id="email_protected_password_new" size="16" value="" autocomplete="off"> <span class="description">' . __( 'If you would like to change the password type a new one. Otherwise leave this blank.', 'email-protected' ) . '</span><br>
+			<input type="password" name="email_protected_password[confirm]" id="email_protected_password_confirm" size="16" value="" autocomplete="off"> <span class="description">' . __( 'Type your new password again.', 'email-protected' ) . '</span>';
 
 	}
 
 	/**
 	 * Allowed IP Addresses Field
 	 */
-	public function password_protected_allowed_ip_addresses_field() {
+	public function email_protected_allowed_ip_addresses_field() {
 
-		echo '<textarea name="password_protected_allowed_ip_addresses" id="password_protected_allowed_ip_addresses" rows="3" class="large-text" />' . get_option( 'password_protected_allowed_ip_addresses' ) . '</textarea>';
-		echo '<p class="description">' . esc_html__( 'Enter one IP address per line.', 'password-protected' ) . ' ' . esc_html( sprintf( __( 'Your IP is address %s.', 'password-protected' ), $_SERVER['REMOTE_ADDR'] ) ) . '</p>';
+		echo '<textarea name="email_protected_allowed_ip_addresses" id="email_protected_allowed_ip_addresses" rows="3" class="large-text" />' . get_option( 'email_protected_allowed_ip_addresses' ) . '</textarea>';
+		echo '<p class="description">' . esc_html__( 'Enter one IP address per line.', 'email-protected' ) . ' ' . esc_html( sprintf( __( 'Your IP is address %s.', 'email-protected' ), $_SERVER['REMOTE_ADDR'] ) ) . '</p>';
 
 	}
 
 	/**
-	 * Pre-update 'password_protected_password' Option
+	 * Pre-update 'email_protected_password' Option
 	 *
 	 * Before the password is saved, MD5 it!
 	 * Doing it in this way allows developers to intercept with an earlier filter if they
@@ -260,7 +260,7 @@ class Password_Protected_Admin {
 	 * @param   string  $oldvalue  Old Value.
 	 * @return  string             Filtered new value.
 	 */
-	public function pre_update_option_password_protected_password( $newvalue, $oldvalue ) {
+	public function pre_update_option_email_protected_password( $newvalue, $oldvalue ) {
 
 		global $Password_Protected;
 
@@ -285,9 +285,9 @@ class Password_Protected_Admin {
 	 */
 	public function plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 
-		if ( 'password-protected/password-protected.php' == $plugin_file ) {
-			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'http://github.com/benhuson/password-protected', 'password-protected' ), __( 'GitHub', 'password-protected' ) );
-			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'https://www.transifex.com/projects/p/password-protected/resource/password-protected/', 'password-protected' ), __( 'Translate', 'password-protected' ) );
+		if ( 'email-protected/email-protected.php' == $plugin_file ) {
+			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'http://github.com/benhuson/email-protected', 'email-protected' ), __( 'GitHub', 'email-protected' ) );
+			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'https://www.transifex.com/projects/p/email-protected/resource/email-protected/', 'email-protected' ), __( 'Translate', 'email-protected' ) );
 		}
 
 		return $plugin_meta;
@@ -304,7 +304,7 @@ class Password_Protected_Admin {
 	 */
 	public function plugin_action_links( $actions ) {
 
-		$actions[] = sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=password-protected' ), __( 'Settings', 'password-protected' ) );
+		$actions[] = sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=email-protected' ), __( 'Settings', 'email-protected' ) );
 		return $actions;
 
 	}
@@ -313,7 +313,7 @@ class Password_Protected_Admin {
 	 * Password Admin Notice
 	 * Warns the user if they have enabled password protection but not entered a password
 	 */
-	public function password_protected_admin_notices() {
+	public function email_protected_admin_notices() {
 
 		global $Password_Protected;
 
@@ -328,20 +328,20 @@ class Password_Protected_Admin {
 
 		// Settings
 		if ( $this->is_current_screen( $this->plugin_screen_ids() ) ) {
-			$status = get_option( 'password_protected_status' );
-			$pwd = get_option( 'password_protected_password' );
+			$status = get_option( 'email_protected_status' );
+			$pwd = get_option( 'email_protected_password' );
 
 			if ( (bool) $status && empty( $pwd ) ) {
-				echo $this->admin_error_display( __( 'You have enabled password protection but not yet set a password. Please set one below.', 'password-protected' ) );
+				echo $this->admin_error_display( __( 'You have enabled password protection but not yet set a password. Please set one below.', 'email-protected' ) );
 			}
 
-			if ( current_user_can( 'manage_options' ) && ( (bool) get_option( 'password_protected_administrators' ) || (bool) get_option( 'password_protected_users' ) ) ) {
-				if ( (bool) get_option( 'password_protected_administrators' ) && (bool) get_option( 'password_protected_users' ) ) {
-					echo $this->admin_error_display( __( 'You have enabled password protection and allowed administrators and logged in users - other users will still need to enter a password to view the site.', 'password-protected' ) );
-				} elseif ( (bool) get_option( 'password_protected_administrators' ) ) {
-					echo $this->admin_error_display( __( 'You have enabled password protection and allowed administrators - other users will still need to enter a password to view the site.', 'password-protected' ) );
-				} elseif ( (bool) get_option( 'password_protected_users' ) ) {
-					echo $this->admin_error_display( __( 'You have enabled password protection and allowed logged in users - other users will still need to enter a password to view the site.', 'password-protected' ) );
+			if ( current_user_can( 'manage_options' ) && ( (bool) get_option( 'email_protected_administrators' ) || (bool) get_option( 'email_protected_users' ) ) ) {
+				if ( (bool) get_option( 'email_protected_administrators' ) && (bool) get_option( 'email_protected_users' ) ) {
+					echo $this->admin_error_display( __( 'You have enabled password protection and allowed administrators and logged in users - other users will still need to enter a password to view the site.', 'email-protected' ) );
+				} elseif ( (bool) get_option( 'email_protected_administrators' ) ) {
+					echo $this->admin_error_display( __( 'You have enabled password protection and allowed administrators - other users will still need to enter a password to view the site.', 'email-protected' ) );
+				} elseif ( (bool) get_option( 'email_protected_users' ) ) {
+					echo $this->admin_error_display( __( 'You have enabled password protection and allowed logged in users - other users will still need to enter a password to view the site.', 'email-protected' ) );
 				}
 			}
 

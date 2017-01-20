@@ -39,17 +39,17 @@ if ( SITECOOKIEPATH != COOKIEPATH ) {
 
 // If cookies are disabled we can't log in even with a valid password.
 if ( isset( $_POST['testcookie'] ) && empty( $_COOKIE[ TEST_COOKIE ] ) ) {
-	$Password_Protected->errors->add( 'test_cookie', __( "<strong>ERROR</strong>: Cookies are blocked or not supported by your browser. You must <a href='http://www.google.com/cookies.html'>enable cookies</a> to use WordPress.", 'password-protected' ) );
+	$Password_Protected->errors->add( 'test_cookie', __( "<strong>ERROR</strong>: Cookies are blocked or not supported by your browser. You must <a href='http://www.google.com/cookies.html'>enable cookies</a> to use WordPress.", 'email-protected' ) );
 }
 
 // Shake it!
 $shake_error_codes = array( 'empty_password', 'incorrect_password' );
 if ( $Password_Protected->errors->get_error_code() && in_array( $Password_Protected->errors->get_error_code(), $shake_error_codes ) ) {
-	add_action( 'password_protected_login_head', 'wp_shake_js', 12 );
+	add_action( 'email_protected_login_head', 'wp_shake_js', 12 );
 }
 
 // Obey privacy setting
-add_action( 'password_protected_login_head', 'noindex' );
+add_action( 'email_protected_login_head', 'noindex' );
 
 ?>
 <!DOCTYPE html>
@@ -57,7 +57,7 @@ add_action( 'password_protected_login_head', 'noindex' );
 <head>
 
 <meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />
-<title><?php echo apply_filters( 'password_protected_wp_title', get_bloginfo( 'name' ) ); ?></title>
+<title><?php echo apply_filters( 'email_protected_wp_title', get_bloginfo( 'name' ) ); ?></title>
 
 <?php
 
@@ -89,38 +89,38 @@ if ( $is_iphone ) {
 }
 
 do_action( 'login_enqueue_scripts' );
-do_action( 'password_protected_login_head' );
+do_action( 'email_protected_login_head' );
 
 ?>
 
 </head>
-<body class="login login-password-protected login-action-password-protected-login wp-core-ui">
+<body class="login login-email-protected login-action-email-protected-login wp-core-ui">
 
 <div id="login">
-	<h1><a href="<?php echo esc_url( apply_filters( 'password_protected_login_headerurl', home_url( '/' ) ) ); ?>" title="<?php echo esc_attr( apply_filters( 'password_protected_login_headertitle', get_bloginfo( 'name' ) ) ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
+	<h1><a href="<?php echo esc_url( apply_filters( 'email_protected_login_headerurl', home_url( '/' ) ) ); ?>" title="<?php echo esc_attr( apply_filters( 'email_protected_login_headertitle', get_bloginfo( 'name' ) ) ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
 
-	<?php do_action( 'password_protected_login_messages' ); ?>
-	<?php do_action( 'password_protected_before_login_form' ); ?>
+	<?php do_action( 'email_protected_login_messages' ); ?>
+	<?php do_action( 'email_protected_before_login_form' ); ?>
 
 	<form name="loginform" id="loginform" action="<?php echo esc_url( $Password_Protected->login_url() ); ?>" method="post">
 		<p>
-			<label for="password_protected_pass">Your Email<br />
-			<input type="text" name="password_protected_pwd" id="password_protected_pass" class="input" value="" size="20" tabindex="20" /></label>
+			<label for="email_protected_pass">Your Email<br />
+			<input type="text" name="email_protected_pwd" id="email_protected_pass" class="input" value="" size="20" tabindex="20" /></label>
 		</p>
 		<p class="submit">
-			<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In', 'password-protected' ); ?>" tabindex="100" />
+			<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In', 'email-protected' ); ?>" tabindex="100" />
 			<input type="hidden" name="testcookie" value="1" />
-			<input type="hidden" name="password-protected" value="login" />
+			<input type="hidden" name="email-protected" value="login" />
 			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $_REQUEST['redirect_to'] ); ?>" />
 		</p>
 	</form>
 
-	<?php do_action( 'password_protected_after_login_form' ); ?>
+	<?php do_action( 'email_protected_after_login_form' ); ?>
 
 </div>
 
 <script type="text/javascript">
-try{document.getElementById('password_protected_pass').focus();}catch(e){}
+try{document.getElementById('email_protected_pass').focus();}catch(e){}
 if(typeof wpOnload=='function')wpOnload();
 </script>
 
