@@ -1,31 +1,14 @@
 <?php
 
 /*
-Plugin Name: Password Protected
-Plugin URI: https://wordpress.org/plugins/password-protected/
-Description: A very simple way to quickly password protect your WordPress site with a single password. Please note: This plugin does not restrict access to uploaded files and images and does not work on WP Engine or with some caching setups.
-Version: 2.0.3
-Author: Ben Huson
-Text Domain: password-protected
-Author URI: http://github.com/benhuson/password-protected/
+Plugin Name: Email Protected
+Plugin URI: 
+Description: A very simple way to quickly password protect your WordPress site with added user's email id. Please note: This plugin does not restrict access to uploaded files and images and does not work on WP Engine or with some caching setups.
+Version: 999
+Author: Manish Motwani
+Text Domain: email-protected
+Author URI: https://github.com/motsmanish/email-protected
 License: GPLv2
-*/
-
-/*
-Copyright 2012 Ben Huson (email : ben@thewhiteroom.net)
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License, version 2, as 
-published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /**
@@ -42,7 +25,7 @@ $Password_Protected = new Password_Protected();
 
 class Password_Protected {
 
-	var $version = '2.0.3';
+	var $version = '999';
 	var $admin   = null;
 	var $errors  = null;
 
@@ -277,11 +260,15 @@ class Password_Protected {
 	public function maybe_process_login() {
 
 		if ( $this->is_active() && isset( $_REQUEST['password_protected_pwd'] ) ) {
-			$password_protected_pwd = $_REQUEST['password_protected_pwd'];
-			$pwd = get_option( 'password_protected_password' );
+			$email = $_REQUEST['password_protected_pwd'];
+			global $wpdb;
+			$query = $wpdb->prepare( "SELECT * FROM $wpdb->users where user_email = '%s' limit 1", $email );
+			$response = $wpdb->get_results( $query );
 
+			$response = empty( $response ) ? false : json_decode(json_encode($response), true);
+			$email_allowed = (isset($response[0]['ID']) && $response[0]['user_email'] != get_option( 'admin_email' ));
 			// If correct password...
-			if ( ( $this->encrypt_password( $password_protected_pwd ) == $pwd && $pwd != '' ) || apply_filters( 'password_protected_process_login', false, $password_protected_pwd ) ) {
+			if ( ( $email_allowed ) ) {
 
 				$this->set_auth_cookie();
 				$redirect_to = isset( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : '';

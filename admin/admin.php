@@ -14,9 +14,9 @@ class Password_Protected_Admin {
 
 		add_action( 'admin_init', array( $this, 'password_protected_settings' ), 5 );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'password_protected_help_tabs', array( $this, 'help_tabs' ), 5 );
-		add_action( 'admin_notices', array( $this, 'password_protected_admin_notices' ) );
-		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 4 );
+		//add_action( 'password_protected_help_tabs', array( $this, 'help_tabs' ), 5 );
+		//add_action( 'admin_notices', array( $this, 'password_protected_admin_notices' ) );
+		//add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 4 );
 		add_filter( 'plugin_action_links_password-protected/password-protected.php', array( $this, 'plugin_action_links' ) );
 		add_filter( 'pre_update_option_password_protected_password', array( $this, 'pre_update_option_password_protected_password' ), 10, 2 );
 
@@ -40,7 +40,7 @@ class Password_Protected_Admin {
 
 		<div class="wrap">
 			<div id="icon-options-general" class="icon32"><br /></div>
-			<h2><?php _e( 'Password Protected Settings', 'password-protected' ) ?></h2>
+			<h2><?php _e( 'Email Protection Settings', 'password-protected' ) ?></h2>
 			<form method="post" action="options.php">
 				<?php
 				settings_fields( 'password-protected' );
@@ -78,7 +78,7 @@ class Password_Protected_Admin {
 		$current_screen->add_help_tab( array(
 			'id'      => 'PASSWORD_PROTECTED_SETTINGS',
 			'title'   => __( 'Password Protected', 'password-protected' ),
-			'content' => __( '<p><strong>Password Protected Status</strong><br />Turn on/off password protection.</p>', 'password-protected' )
+			'content' => __( '<p><strong>Email Protection Status</strong><br />Turn on/off password protection.</p>', 'password-protected' )
 				. __( '<p><strong>Protected Permissions</strong><br />Allow access for logged in users and administrators without needing to enter a password. You will need to enable this option if you want administrators to be able to preview the site in the Theme Customizer. Also allow RSS Feeds to be accessed when the site is password protected.</p>', 'password-protected' )
 				. __( '<p><strong>Password Fields</strong><br />To set a new password, enter it into both fields. You cannot set an `empty` password. To disable password protection uncheck the Enabled checkbox.</p>', 'password-protected' )
 		) );
@@ -99,7 +99,7 @@ class Password_Protected_Admin {
 
 		add_settings_field(
 			'password_protected_status',
-			__( 'Password Protected Status', 'password-protected' ),
+			__( 'Email Protection Status', 'password-protected' ),
 			array( $this, 'password_protected_status_field' ),
 			$this->options_group,
 			'password_protected'
@@ -112,7 +112,7 @@ class Password_Protected_Admin {
 			$this->options_group,
 			'password_protected'
 		);
-
+/*
 		add_settings_field(
 			'password_protected_password',
 			__( 'New Password', 'password-protected' ),
@@ -128,13 +128,13 @@ class Password_Protected_Admin {
 			$this->options_group,
 			'password_protected'
 		);
-
+*/
 		register_setting( $this->options_group, 'password_protected_status', 'intval' );
-		register_setting( $this->options_group, 'password_protected_feeds', 'intval' );
+		//register_setting( $this->options_group, 'password_protected_feeds', 'intval' );
 		register_setting( $this->options_group, 'password_protected_administrators', 'intval' );
-		register_setting( $this->options_group, 'password_protected_users', 'intval' );
-		register_setting( $this->options_group, 'password_protected_password', array( $this, 'sanitize_password_protected_password' ) );
-		register_setting( $this->options_group, 'password_protected_allowed_ip_addresses', array( $this, 'sanitize_ip_addresses' ) );
+		//register_setting( $this->options_group, 'password_protected_users', 'intval' );
+		//register_setting( $this->options_group, 'password_protected_password', array( $this, 'sanitize_password_protected_password' ) );
+		//register_setting( $this->options_group, 'password_protected_allowed_ip_addresses', array( $this, 'sanitize_ip_addresses' ) );
 
 	}
 
@@ -205,9 +205,8 @@ class Password_Protected_Admin {
 	 */
 	public function password_protected_settings_section() {
 
-		echo '<p>' . __( 'Password protect your web site. Users will be asked to enter a password to view the site.', 'password-protected' ) . '<br />
-			' . __( 'For more information about Password Protected settings, view the "Help" tab at the top of this page.', 'password-protected' ) . '</p>';
-
+		echo '<p>' . __( 'Password protect your web site. Users will be asked to enter the email used for subscription to view the site.', 'password-protected' )  . '</p>';
+			
 	}
 
 	/**
@@ -225,8 +224,8 @@ class Password_Protected_Admin {
 	public function password_protected_permissions_field() {
 
 		echo '<label><input name="password_protected_administrators" id="password_protected_administrators" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_administrators' ), false ) . ' /> ' . __( 'Allow Administrators', 'password-protected' ) . '</label>';
-		echo '<label><input name="password_protected_users" id="password_protected_users" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_users' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow Logged In Users', 'password-protected' ) . '</label>';
-		echo '<label><input name="password_protected_feeds" id="password_protected_feeds" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_feeds' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow RSS Feeds', 'password-protected' ) . '</label>';
+		//echo '<label><input name="password_protected_users" id="password_protected_users" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_users' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow Logged In Users', 'password-protected' ) . '</label>';
+		//echo '<label><input name="password_protected_feeds" id="password_protected_feeds" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_feeds' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow RSS Feeds', 'password-protected' ) . '</label>';
 
 	}
 
