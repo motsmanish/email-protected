@@ -20,8 +20,8 @@ define( 'email_protected_SUBDIR', '/' . str_replace( basename( __FILE__ ), '', p
 define( 'email_protected_URL', plugins_url( email_protected_SUBDIR ) );
 define( 'email_protected_DIR', plugin_dir_path( __FILE__ ) );
 
-global $Password_Protected;
-$Password_Protected = new Password_Protected();
+global $Email_Protected;
+$Email_Protected = new Password_Protected();
 
 class Password_Protected {
 
@@ -50,7 +50,6 @@ class Password_Protected {
 		add_filter( 'pre_option_email_protected_status', array( $this, 'allow_feeds' ) );
 		add_filter( 'pre_option_email_protected_status', array( $this, 'allow_administrators' ) );
 		add_filter( 'pre_option_email_protected_status', array( $this, 'allow_users' ) );
-		add_action( 'init', array( $this, 'compat' ) );
 		add_action( 'email_protected_login_messages', array( $this, 'login_messages' ) );
 		add_action( 'login_enqueue_scripts', array( $this, 'load_theme_stylesheet' ), 5 );
 
@@ -611,30 +610,6 @@ class Password_Protected {
 	}
 
 	/**
-	 * Compat
-	 *
-	 * Support for 3rd party plugins:
-	 *
-	 * - Login Logo       http://wordpress.org/extend/plugins/login-logo/
-	 * - Uber Login Logo  http://wordpress.org/plugins/uber-login-logo/
-	 */
-	public function compat() {
-
-		if ( class_exists( 'CWS_Login_Logo_Plugin' ) ) {
-
-			// Add support for Mark Jaquith's Login Logo plugin
-			add_action( 'email_protected_login_head', array( new CWS_Login_Logo_Plugin, 'login_head' ) );
-
-		} elseif ( class_exists( 'UberLoginLogo' ) ) {
-
-			// Add support for Uber Login Logo plugin
-			add_action( 'email_protected_login_head', array( 'UberLoginLogo', 'replaceLoginLogo' ) );
-
-		}
-
-	}
-
-	/**
 	 * Login Messages
 	 * Outputs messages and errors in the login template.
 	 */
@@ -694,7 +669,7 @@ class Password_Protected {
 
 			$stylesheet_directory = trailingslashit( get_stylesheet_directory() );
 			$template_directory = trailingslashit( get_template_directory() );
-
+			
 			if ( $stylesheet_directory == substr( $located, 0, strlen( $stylesheet_directory ) ) ) {
 				wp_enqueue_style( 'email-protected-login', get_stylesheet_directory_uri() . '/' . $filename );
 			} else if ( $template_directory == substr( $located, 0, strlen( $template_directory ) ) ) {

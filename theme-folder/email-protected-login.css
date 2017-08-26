@@ -1,0 +1,29 @@
+#login {
+	margin: auto;
+	padding: 20px 0;
+	width: 320px;
+}
+.login #login_error {
+	border-left-color: #dc3232;
+}
+.login #login_error, .login .message {
+	background-color: #fff;
+	border-left: 4px solid #00a0d2;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	margin-left: 0;
+	padding: 12px;
+}
+#login_error, .login .message {
+	margin-bottom: 20px;
+}
+.login form {
+	background: #fff none repeat scroll 0 0;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
+	margin-left: 0;
+	margin-top: 20px;
+	padding: 25px;
+}
+.login form, .login h1 a {
+	font-weight: 400;
+	overflow: hidden;
+}

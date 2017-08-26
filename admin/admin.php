@@ -262,10 +262,10 @@ class Email_Protected_Admin {
 	 */
 	public function pre_update_option_email_protected_password( $newvalue, $oldvalue ) {
 
-		global $Password_Protected;
+		global $Email_Protected;
 
 		if ( $newvalue != $oldvalue ) {
-			$newvalue = $Password_Protected->encrypt_password( $newvalue );
+			$newvalue = $Email_Protected->encrypt_password( $newvalue );
 		}
 
 		return $newvalue;
@@ -315,12 +315,12 @@ class Email_Protected_Admin {
 	 */
 	public function email_protected_admin_notices() {
 
-		global $Password_Protected;
+		global $Email_Protected;
 
 		// Check Support
 		$screens = $this->plugin_screen_ids( array( 'dashboard', 'plugins' ) );
 		if ( $this->is_current_screen( $screens ) ) {
-			$supported = $Password_Protected->is_plugin_supported();
+			$supported = $Email_Protected->is_plugin_supported();
 			if ( is_wp_error( $supported ) ) {
 				echo $this->admin_error_display( $supported->get_error_message( $supported->get_error_code() ) );
 			}
